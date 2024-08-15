@@ -1,8 +1,21 @@
 "use client";
-"use client";
 import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
+import { Button } from "antd";
+import { Card, Col, Row, Avatar, Switch } from "antd";
+import {
+  EditOutlined,
+  EllipsisOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+
+const actions = [
+  <EditOutlined key="edit" />,
+  <SettingOutlined key="setting" />,
+  <EllipsisOutlined key="ellipsis" />,
+];
+
 function CronJobSetup() {
   const [apiUrl, setApiUrl] = useState("");
   const [cronSchedule, setCronSchedule] = useState("");
@@ -14,6 +27,11 @@ function CronJobSetup() {
     },
     {
       id: 2,
+      apiUrl: "http://localhost:9000/api/fetch",
+      cronSchedule: "0 0 * * *",
+    },
+    {
+      id: 3,
       apiUrl: "http://localhost:9000/api/fetch",
       cronSchedule: "0 0 * * *",
     },
@@ -32,69 +50,62 @@ function CronJobSetup() {
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Cron Job Management</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Existing Cron Jobs</h2>
-          <ul className="space-y-2">
-            {cronJobs.map((job) => (
-              <li key={job.id} className="p-2 border rounded-md">
-                <p>
-                  <strong>API URL:</strong> {job.apiUrl}
-                </p>
-                <p>
-                  <strong>Cron Schedule:</strong> {job.cronSchedule}
-                </p>
-                <div className="flex gap-2 ">
-                  <MdDelete className=" cursor-pointer" />
-                  <FaPen className=" cursor-pointer" />
-                </div>
-              </li>
-            ))}
-          </ul>
+    <div className="p-4">
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            API URL
+          </label>
+          <input
+            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full md:w-1/2 lg:w-1/4"
+            type="text"
+            value={apiUrl}
+            onChange={(e) => setApiUrl(e.target.value)}
+          />
         </div>
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Add New Cron Job</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                API URL
-              </label>
-              <input
-                type="text"
-                value={apiUrl}
-                onChange={(e) => setApiUrl(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="https://example.com/api"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Cron Schedule
-              </label>
-              <input
-                type="text"
-                value={cronSchedule}
-                onChange={(e) => setCronSchedule(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="* * * * *"
-                required
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Use cron format (e.g., "* * * * *" for every minute)
-              </p>
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Add Cron Job
-            </button>
-          </form>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Cron Schedule
+          </label>
+          <input
+            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full md:w-1/2 lg:w-1/4"
+            type="text"
+            value={cronSchedule}
+            onChange={(e) => setCronSchedule(e.target.value)}
+          />
         </div>
-      </div>
+        <div className="mb-4">
+          <Button type="primary" htmlType="submit">
+            Add
+          </Button>
+        </div>
+      </form>
+      <Row gutter={[16, 16]}>
+        {cronJobs.map((cronJob) => (
+          <Col xs={24} sm={12} md={8} lg={8} key={cronJob.id}>
+            <Card actions={actions} style={{ minWidth: 300 }}>
+              <Card.Meta
+                avatar={
+                  <Avatar
+                    src="
+https://upload.wikimedia.org/wikipedia/commons/d/d3/Alarms_%26_Clock_icon.svg
+                  "
+                  />
+                }
+                title={cronJob.apiUrl}
+                description={
+                  <>
+                    <div className="flex justify-between">
+                      <p>{cronJob.cronSchedule}</p>
+                      <Switch defaultChecked />
+                    </div>
+                  </>
+                }
+              />
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </div>
   );
 }

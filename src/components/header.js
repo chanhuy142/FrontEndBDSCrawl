@@ -7,7 +7,7 @@ import { useSelectedLayoutSegment } from "next/navigation";
 
 import useScroll from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
-
+import { PiBuildingApartmentFill } from "react-icons/pi";
 const Header = () => {
   const scrolled = useScroll(5);
   const selectedLayout = useSelectedLayoutSegment();
@@ -28,8 +28,10 @@ const Header = () => {
             href="/"
             className="flex flex-row space-x-3 items-center justify-center md:hidden"
           >
-            <span className="h-7 w-7 bg-zinc-300 rounded-lg" />
-            <span className="font-bold text-xl flex ">Logo</span>
+            <div className="text-3xl">
+              <PiBuildingApartmentFill />
+            </div>
+            <span className="font-bold text-xl flex ">BDSCrawling</span>
           </Link>
         </div>
 
